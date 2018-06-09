@@ -1,0 +1,6 @@
+SELECT Name,res1.OffLang,res2.NonOffLang
+FROM 
+country,
+(SELECT CountryCode, IsOfficial, COUNT(CountryCode) AS OffLang from countrylanguage where IsOfficial='T' GROUP BY CountryCode) AS res1, 
+(SELECT CountryCode, IsOfficial, COUNT(CountryCode) AS NonOffLang from countrylanguage where IsOfficial='F' GROUP BY CountryCode) AS res2 
+WHERE  res1.CountryCode = res2.CountryCode AND res1.OffLang >= 2 and res2.NonOffLang >= res1.OffLang * 2 AND Code=res1.CountryCode
