@@ -1,0 +1,7 @@
+CREATE VIEW my_table AS
+SELECT res.Code, res.Population, res2.CountryCode, res2.Percentage, (ROUND(res.Population*res2.Percentage/100)) AS Quantity
+FROM
+(SELECT Code,Population FROM country WHERE Continent='Europe' and Code in (SELECT CountryCode FROM countrylanguage WHERE Language='English' )) AS res, 
+(SELECT CountryCode,Percentage FROM countrylanguage WHERE Language='English' AND CountryCode IN ( SELECT Code FROM country WHERE Continent='Europe' )) AS res2 
+WHERE res.Code = res2.CountryCode;
+SELECT SUM(Quantity) FROM my_table;
