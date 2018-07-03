@@ -1,7 +1,9 @@
-CREATE VIEW my_table AS
-SELECT res.Code, res.Population, res2.CountryCode, res2.Percentage, (ROUND(res.Population*res2.Percentage/100)) AS Quantity
-FROM
-(SELECT Code,Population FROM country WHERE Continent='Europe' and Code in (SELECT CountryCode FROM countrylanguage WHERE Language='English' )) AS res, 
-(SELECT CountryCode,Percentage FROM countrylanguage WHERE Language='English' AND CountryCode IN ( SELECT Code FROM country WHERE Continent='Europe' )) AS res2 
-WHERE res.Code = res2.CountryCode;
-SELECT SUM(Quantity) FROM my_table;
+SELECT SUM(Quantity)From
+(SELECT t1.Code,t1.Continent,t1.Population,t2.CountryCode , t2.Language, t2.Percentage,
+ROUND(t1.Population*t2.Percentage/100) AS Quantity
+FROM   
+(SELECT * FROM country WHERE Continent = "Europe")  AS t1
+INNER JOIN
+(select distinct CountryCode , Language, Percentage
+from countrylanguage WHERE Language = "English")  AS  t2
+ON t1.Code=t2.CountryCode) AS result
