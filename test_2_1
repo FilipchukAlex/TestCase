@@ -1,7 +1,7 @@
-SELECT * FROM country WHERE Code IN (
-	SELECT CountryCode FROM (
-		SELECT * FROM city WHERE ID IN (
-			SELECT Capital FROM country 
-		)ORDER BY Population DESC LIMIT 5
-	) AS results
-)
+SELECT * FROM country
+INNER JOIN
+(SELECT ID,Name AS CapitalName, Population AS CapitalPopulation
+FROM city) as res
+ON country.Capital = res.ID
+ORDER BY CapitalPopulation DESC
+LIMIT 5
